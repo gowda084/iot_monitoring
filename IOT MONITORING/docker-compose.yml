@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  snmp-device:
+    image: polinux/snmpd
+    container_name: snmp-device
+    environment:
+      - SNMPD_CONTACT=admin@iot.local
+      - SNMPD_LOCATION=Lab-Room-101
+    ports:
+      - "161:161/udp"
+
+  snmp-exporter:
+    image: prom/snmp-exporter
+    container_name: snmp-exporter
+    volumes:
+      - ./snmp.yml:/etc/snmp_exporter/snmp.yml
+    ports:
+      - "9116:9116"
+    depends_on:
+      - snmp-device
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - snmp-exporter
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
