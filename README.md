@@ -1,34 +1,45 @@
 📡 IoT Monitoring System using Prometheus & SNMP
 
-This project implements a real-time IoT Device Monitoring System using Prometheus, SNMP Exporter, and Docker Compose. The system collects metrics from IoT devices via SNMP, converts them using SNMP Exporter, and visualizes them using Prometheus.
+This project implements a real-time IoT Monitoring System using Prometheus, SNMP Exporter, and Docker Compose.
+The system collects SNMP metrics from IoT devices, converts them via the SNMP Exporter, and visualizes them in Prometheus.
 
-🚀 Features:
+🚀 Features
 
 ✔ Real-time IoT device monitoring
 
 ✔ SNMP-based metrics collection (CPU, memory, bandwidth, uptime, etc.)
 
-✔ Prometheus time-series database
+✔ Prometheus time-series storage
 
-✔ Docker-based deployment (easy setup)
+✔ Docker-based deployment (simple & portable)
 
 ✔ Customizable prometheus.yml and snmp.yml
 
-✔ Scalable to multiple IoT devices
+✔ Supports multiple IoT devices
 
-🏗 Project Architecture IoT Device → SNMP Agent → SNMP Exporter → Prometheus → Dashboard / Alerts
+🏗 Project Architecture
+IoT Device → SNMP Agent → SNMP Exporter → Prometheus → Dashboard / Alerts
 
 📂 Repository Structure
+IOT-MONITORING/
+│── docker-compose.yml
+│── prometheus.yml
+│── snmp.yml
+└── README.md
 
-📁 IOT-MONITORING/ │── docker-compose.yml │── prometheus.yml │── snmp.yml └── README.md
+⚙️ Technologies Used
+Tool	Purpose
+Prometheus	Metrics scraping & storage
+SNMP Exporter	Converts SNMP metrics → Prometheus format
+Docker Compose	Container orchestration
+SNMP Protocol	Device-level metrics collection
+📌 Setup Instructions
 
-⚙️ Technologies Used Tool Purpose Prometheus Metrics scraping and storage SNMP Exporter Converts SNMP data → Prometheus format Docker & Docker Compose Container orchestration SNMP Protocol Device-level metrics collection 📌 Setup Instructions
-
-Follow these steps to run the monitoring system on your machine:
+Follow these steps to run the monitoring system:
 
 1️⃣ Install Required Tools
 
-Before running the project, ensure you have:
+Make sure you have installed:
 
 Docker
 
@@ -36,88 +47,90 @@ Docker Compose
 
 (Optional) Grafana for dashboards
 
-2️⃣ Clone the Repository git clone (https://github.com/gowda084/iot_monitoring)
-git cd IOT-MONITORING
+2️⃣ Clone the Repository
+git clone https://github.com/gowda084/iot_monitoring.git
+cd iot_monitoring
 
 3️⃣ Configure SNMP Targets
 
-Open snmp.yml and set:
+Edit snmp.yml:
 
-IoT device IP
-
-SNMP community
-
-Required OIDs for metrics
+Set IoT device IP, SNMP community, and OIDs.
 
 Example:
 
-modules: if_mib: walk: - 1.3.6.1.2.1.1 version: 2
+modules:
+  if_mib:
+    walk:
+      - 1.3.6.1.2.1.1
+    version: 2
 
 4️⃣ Configure Prometheus Targets
 
-In prometheus.yml, define your SNMP exporter as a scrape target:
+Inside prometheus.yml, define SNMP exporter as a scrape target:
 
 scrape_configs:
+  - job_name: 'snmp'
+    static_configs:
+      - targets: ['snmp-exporter:9116']
 
-job_name: 'snmp' static_configs:
-targets:
-'snmp-exporter:9116'
 5️⃣ Start the System
-
-Run:
-
 docker-compose up -d
 
-This will start:
+
+This launches:
 
 Prometheus
 
 SNMP Exporter
 
-6️⃣ Access Dashboards ▶ Prometheus UI http://localhost:9090
+6️⃣ Access Dashboards
+Service	URL
+Prometheus UI	http://localhost:9090
 
-▶ SNMP Exporter Metrics http://localhost:9116/metrics
-
+SNMP Exporter	http://localhost:9116/metrics
 📊 Monitoring & Alerts
 
-You can run PromQL queries such as:
+Example PromQL queries:
 
-up node_cpu_seconds_total ifInOctets ifOutOctets
+up
 
-You may also integrate Grafana for better visualization.
+node_cpu_seconds_total
+
+ifInOctets
+
+ifOutOctets
+
+Integrate Grafana for advanced dashboards.
 
 🧪 Testing the Setup
 
-Verify Prometheus is scraping metrics
+Verify SNMP is working using:
 
-Check SNMP Exporter logs
+snmpwalk -v2c -c public <DEVICE_IP>
 
-Confirm the IoT device is reachable via SNMP
 
-Use tools like snmpwalk for validation
+Check:
 
-Example:
+Prometheus scrape status
 
-snmpwalk -v2c -c public
+SNMP Exporter logs
+
+Device SNMP connectivity
 
 📈 Future Enhancements
 
 Add Grafana dashboards
 
-Add alerting rules in alert.rules.yml
+Add alerting rules (alert.rules.yml)
 
 Anomaly detection using ML
 
-Support for SNMP v3 authentication
+SNMP v3 authentication support
 
-🤝 Contributing
 
-Contributions are welcome! Feel free to fork the repository and submit a Pull Request.
 
-🙌 Acknowledgments
 
-Prometheus Team
-
-SNMP Exporter contributors
+SNMP Exporter Contributors
 
 Docker Community
