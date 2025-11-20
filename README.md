@@ -36,7 +36,8 @@ Docker Compose
 
 (Optional) Grafana for dashboards
 
-2️⃣ Clone the Repository git clone https://github.com//IOT-MONITORING.git cd IOT-MONITORING
+2️⃣ Clone the Repository git clone (https://github.com/gowda084/iot_monitoring)
+git cd IOT-MONITORING
 
 3️⃣ Configure SNMP Targets
 
